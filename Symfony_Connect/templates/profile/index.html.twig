@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil de
+	{{ user.username }}
+	- SymfoConnect
+{% endblock %}
+
+{% block body %}
+	<h1>Profil de
+		{{ user.username }}</h1>
+	{% if user.avatarUrl %}
+		<img src="{{ user.avatarUrl }}" alt="Avatar" style="max-width:100px;max-height:100px;">
+	{% endif %}
+	<p>
+		<strong>Bio :</strong>
+		{{ user.bio ? user.bio : 'Non renseignée' }}</p>
+	<h2>Ses posts</h2>
+	<ul>
+		{% for post in posts %}
+			<li>
+				{{ post.createdAt ? post.createdAt|date('d/m/Y H:i') : 'Date inconnue' }}<br>
+				{{ post.content|e }}
+			</li>
+		{% else %}
+			<li>Aucun post pour ce profil.</li>
+		{% endfor %}
+	</ul>
+{% endblock %}

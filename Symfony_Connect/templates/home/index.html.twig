@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - SymfoConnect
+{% endblock %}
+
+{% block body %}
+	<h1>Derniers posts</h1>
+	<ul>
+		{% for post in posts %}
+			<li>
+				<strong>{{ post.author.username }}</strong>
+				—
+				{{ post.createdAt ? post.createdAt|date('d/m/Y H:i') : 'Date inconnue' }}<br>
+				{{ post.content|e }}
+			</li>
+		{% else %}
+			<li>Aucun post pour le moment.</li>
+		{% endfor %}
+	</ul>
+{% endblock %}
