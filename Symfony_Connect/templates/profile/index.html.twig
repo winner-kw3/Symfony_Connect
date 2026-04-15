@@ -15,14 +15,18 @@
 		<strong>Bio :</strong>
 		{{ user.bio ? user.bio : 'Non renseignée' }}</p>
 	<h2>Ses posts</h2>
-	<ul>
+	<div>
 		{% for post in posts %}
-			<li>
-				{{ post.createdAt ? post.createdAt|date('d/m/Y H:i') : 'Date inconnue' }}<br>
-				{{ post.content|e }}
-			</li>
+			<div class="post-card">
+				<div class="post-meta">
+					{{ post.createdAt ? post.createdAt|date('d/m/Y H:i') : 'Date inconnue' }}
+				</div>
+				<div class="post-content">
+					{{ post.content|e }}
+				</div>
+			</div>
 		{% else %}
-			<li>Aucun post pour ce profil.</li>
+			<div>Aucun post pour ce profil.</div>
 		{% endfor %}
-	</ul>
+	</div>
 {% endblock %}

@@ -5,16 +5,20 @@
 
 {% block body %}
 	<h1>Derniers posts</h1>
-	<ul>
+	<div>
 		{% for post in posts %}
-			<li>
-				<strong>{{ post.author.username }}</strong>
-				—
-				{{ post.createdAt ? post.createdAt|date('d/m/Y H:i') : 'Date inconnue' }}<br>
-				{{ post.content|e }}
-			</li>
+			<div class="post-card">
+				<div class="post-meta">
+					{{ post.author.username }}
+					—
+					{{ post.createdAt ? post.createdAt|date('d/m/Y H:i') : 'Date inconnue' }}
+				</div>
+				<div class="post-content">
+					{{ post.content|e }}
+				</div>
+			</div>
 		{% else %}
-			<li>Aucun post pour le moment.</li>
+			<div>Aucun post pour le moment.</div>
 		{% endfor %}
-	</ul>
+	</div>
 {% endblock %}

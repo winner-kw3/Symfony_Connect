@@ -21,7 +21,6 @@ final class PostController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // À adapter : ici on assigne le premier utilisateur trouvé comme auteur (à remplacer par l'utilisateur connecté si authentification)
             $user = $em->getRepository(User::class)->findOneBy([]);
             $post->setAuthor($user);
             $post->setCreatedAt(new \DateTimeImmutable());

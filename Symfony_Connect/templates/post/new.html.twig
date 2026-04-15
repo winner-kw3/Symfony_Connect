@@ -5,8 +5,21 @@
 
 {% block body %}
 	<h1>Créer un nouveau post</h1>
-	{{ form_start(form) }}
-	{{ form_row(form.content) }}
-	<button class="btn btn-primary">Publier</button>
-	{{ form_end(form) }}
+	<style>
+		.form-group label {
+			display: block;
+			margin-bottom: 0.5em;
+			font-weight: 600;
+		}
+	</style>
+	<div class="post-card">
+		{{ form_start(form) }}
+		<div class="form-group">
+			{{ form_label(form.content) }}
+			{{ form_widget(form.content) }}
+			{{ form_errors(form.content) }}
+		</div>
+		<button style="background:#2563eb;color:#fff;border:none;padding:0.7em 1.5em;border-radius:6px;font-weight:600;font-size:1em;cursor:pointer;transition:background 0.2s;">Publier</button>
+		{{ form_end(form) }}
+	</div>
 {% endblock %}
