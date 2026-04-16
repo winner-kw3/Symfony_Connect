@@ -14,19 +14,42 @@
 		{{ form_start(registrationForm) }}
 
 		<div style="margin-bottom:15px;">
-			{{ form_row(registrationForm.email) }}
+			<label>Email</label>
+			{{ form_widget(registrationForm.email, {
+                'attr': {
+                    'placeholder': 'ex: email@gmail.com',
+                    'style': 'width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; margin-top:6px;'
+                }
+            }) }}
+			{{ form_errors(registrationForm.email) }}
 		</div>
 
 		<div style="margin-bottom:15px;">
-			{{ form_row(registrationForm.username) }}
+			<label>Nom d’utilisateur</label>
+			{{ form_widget(registrationForm.username, {
+                'attr': {
+                    'placeholder': 'Ton pseudo',
+                    'style': 'width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; margin-top:6px;'
+                }
+            }) }}
+			{{ form_errors(registrationForm.username) }}
 		</div>
 
 		<div style="margin-bottom:15px;">
-			{{ form_row(registrationForm.plainPassword, { label: 'Mot de passe' }) }}
+			<label>Mot de passe</label>
+			{{ form_widget(registrationForm.plainPassword, {
+                'attr': {
+                    'placeholder': '••••••••',
+                    'style': 'width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; margin-top:6px;'
+                }
+            }) }}
+			{{ form_errors(registrationForm.plainPassword) }}
 		</div>
 
 		<div style="margin-bottom:20px;">
-			{{ form_row(registrationForm.agreeTerms) }}
+			{{ form_widget(registrationForm.agreeTerms) }}
+			<label>J’accepte les conditions</label>
+			{{ form_errors(registrationForm.agreeTerms) }}
 		</div>
 
 		<button type="submit" style="width:100%; padding:10px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">
