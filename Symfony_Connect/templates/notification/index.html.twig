@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notifications
+{% endblock %}
+
+{% block body %}
+
+	<h1>Notifications</h1>
+
+	{% if notifications is empty %}
+		<p>Aucune notification.</p>
+	{% else %}
+		<ul>
+			{% for notif in notifications %}
+				<li style="{% if not notif.isRead %}font-weight:bold;{% endif %}">
+					{{ notif.content }}
+					<small>
+						-
+						{{ notif.createdAt|date('d/m/Y H:i') }}
+					</small>
+				</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+
+{% endblock %}

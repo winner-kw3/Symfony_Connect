@@ -90,8 +90,24 @@
 	<body>
 		<nav>
 			<a href="{{ path('app_home') }}">Accueil</a>
+            <a href="{{ path('app_feed') }}">Feed</a>
 			<a href="{{ path('post_new') }}">Nouveau post</a>
-			<a href="{{ path('app_profile', {'username': 'testuser'}) }}">Profil testuser</a>
+            <a href="{{ path('app_notifications') }}">Notifications</a>
+
+
+            {% if app.user %}
+                <a href="{{ path('app_profile', {'username': app.user.username}) }}">Profil</a>
+            {% endif %}
+
+
+
+			
+            {% if app.user %}
+                <span style="margin-left:auto;">Connecté en tant que {{ app.user.username }}</span>
+                <a href="{{ path('app_logout') }}" style="margin-left:1em;background:#e53e3e;padding:0.5em 1em;border-radius:6px;color:#fff;font-weight:600;transition:background 0.2s;">Logout</a>
+            {% else %}
+                <a href="{{ path('app_login') }}" style="margin-left:auto;background:#2563eb;padding:0.5em 1em;border-radius:6px;color:#fff;font-weight:600;transition:background 0.2s;">Login</a>
+            {% endif %}
 		</nav>
 		<div class="container">
 			{% for label, messages in app.flashes %}

@@ -14,7 +14,50 @@
 	<p>
 		<strong>Bio :</strong>
 		{{ user.bio ? user.bio : 'Non renseignée' }}</p>
-	<h2>Ses posts</h2>
+
+
+{# Stats followers/following #}
+<div>
+	<span>
+		<strong>{{ user.followersCount }}</strong>
+		followers</span>
+	<span>
+		<strong>{{ user.followingCount }}</strong>
+		suivis</span>
+</div>
+
+    
+    {% if app.user and not isOwner %}
+
+        {% if isFollowing %}
+
+            <form method="post" action="{{ path('user_unfollow', { username: user.username }) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('unfollow' ~ user.id) }}">
+                <button type="submit">Ne plus suivre</button>
+            </form>
+
+        {% else %}
+
+            <form method="post" action="{{ path('user_follow', { username: user.username }) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('follow' ~ user.id) }}">
+                <button type="submit">Suivre</button>
+            </form>
+
+        {% endif %}
+
+    {% endif %}
+
+
+
+
+
+
+
+    {% if isOwner %}
+        <a href="">Modifier mon profil</a>
+    {% endif %}
+
+	<h2>Tes posts</h2>
 	<div>
 		{% for post in posts %}
 			<div class="post-card">
@@ -24,6 +67,17 @@
 				<div class="post-content">
 					{{ post.content|e }}
 				</div>
+
+                {% if is_granted('POST_DELETE', post) %}
+                    <form method="post" action="{{ path('post_delete', { id: post.id }) }}" onsubmit="return confirm('Supprimer ce post ?');">
+
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ post.id) }}">
+
+                        <button type="submit">🗑 Supprimer</button>
+                    </form>
+                {% endif %}
+
+
 			</div>
 		{% else %}
 			<div>Aucun post pour ce profil.</div>

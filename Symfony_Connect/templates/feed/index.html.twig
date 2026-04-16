@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Feed
+{% endblock %}
+
+{% block body %}
+
+	<h1>Ton fil d'actualité</h1>
+
+	{% if empty %}
+		<p>
+			Tu ne suis encore personne<br>
+			Commence à suivre des utilisateurs pour voir leurs posts.
+		</p>
+	{% else %}
+
+		{% for post in posts %}
+			<div class="post-card">
+				<div class="post-meta">
+					<a href="{{ path('app_profile', { username: post.author.username }) }}">
+						{{ post.author.username }}
+					</a>
+					-
+					{{ post.createdAt|date('d/m/Y H:i') }}
+				</div>
+
+				<div class="post-content">
+					{{ post.content }}
+				</div>
+
+				<div>
+					❤️
+					{{ post.likesCount }}
+					likes
+				</div>
+			</div>
+		{% endfor %}
+
+	{% endif %}
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription
+{% endblock %}
+
+{% block body %}
+
+	<div style="max-width:420px; margin:60px auto; padding:30px; background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+
+		<h1 style="text-align:center; margin-bottom:25px;">Créer un compte</h1>
+
+		{{ form_errors(registrationForm) }}
+
+		{{ form_start(registrationForm) }}
+
+		<div style="margin-bottom:15px;">
+			{{ form_row(registrationForm.email) }}
+		</div>
+
+		<div style="margin-bottom:15px;">
+			{{ form_row(registrationForm.username) }}
+		</div>
+
+		<div style="margin-bottom:15px;">
+			{{ form_row(registrationForm.plainPassword, { label: 'Mot de passe' }) }}
+		</div>
+
+		<div style="margin-bottom:20px;">
+			{{ form_row(registrationForm.agreeTerms) }}
+		</div>
+
+		<button type="submit" style="width:100%; padding:10px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">
+			S’inscrire
+		</button>
+
+		{{ form_end(registrationForm) }}
+
+		<p style="text-align:center; margin-top:15px;">
+			Déjà un compte ?
+			<a href="{{ path('app_login') }}" style="color:#2563eb;">Connexion</a>
+		</p>
+
+	</div>
+
+{% endblock %}
