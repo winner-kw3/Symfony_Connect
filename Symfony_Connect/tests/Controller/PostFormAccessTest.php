@@ -11,7 +11,7 @@ class PostFormAccessTest extends WebTestCase
     {
         $client = static::createClient();
 
-        // récupère un vrai user en base
+        
         $container = static::getContainer();
         $user = $container->get('doctrine')
             ->getRepository(User::class)
