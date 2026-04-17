@@ -1,25 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau post - SymfoConnect
+{% block title %}Nouveau post
 {% endblock %}
 
 {% block body %}
-	<h1>Créer un nouveau post</h1>
-	<style>
-		.form-group label {
-			display: block;
-			margin-bottom: 0.5em;
-			font-weight: 600;
-		}
-	</style>
-	<div class="post-card">
-		{{ form_start(form) }}
-		<div class="form-group">
-			{{ form_label(form.content) }}
-			{{ form_widget(form.content) }}
-			{{ form_errors(form.content) }}
+
+	<div style="max-width:600px; margin:40px auto;">
+
+		<h1 style="margin-bottom:20px;">Créer un post</h1>
+
+		<div style="background:#fff; border:1px solid #eee; border-radius:12px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+
+			{{ form_start(form) }}
+
+			<div style="margin-bottom:15px;">
+				<label style="display:block; font-weight:600; margin-bottom:8px;">
+					Ton message
+				</label>
+
+				{{ form_widget(form.content, {
+                'attr': {
+                    'placeholder': 'Votre poste...',
+                    'rows': 4,
+                    'style': 'width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; resize:none;'
+                }
+            }) }}
+
+				{{ form_errors(form.content) }}
+			</div>
+
+			<button type="submit" style="background:#2563eb; color:#fff; border:none; padding:10px 18px; border-radius:8px; font-weight:600; cursor:pointer; transition:0.2s;">
+				Publier
+			</button>
+
+			{{ form_end(form) }}
+
 		</div>
-		<button style="background:#2563eb;color:#fff;border:none;padding:0.7em 1.5em;border-radius:6px;font-weight:600;font-size:1em;cursor:pointer;transition:background 0.2s;">Publier</button>
-		{{ form_end(form) }}
+
 	</div>
+
 {% endblock %}

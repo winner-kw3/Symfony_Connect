@@ -5,22 +5,43 @@
 
 {% block body %}
 
-	<h1>Notifications</h1>
+	<div style="max-width:600px; margin:40px auto;">
 
-	{% if notifications is empty %}
-		<p>Aucune notification.</p>
-	{% else %}
-		<ul>
+		<h1 style="margin-bottom:20px;">Notifications</h1>
+
+		{% if notifications is empty %}
+			<div style="text-align:center; color:#777; margin-top:40px;">
+				📭 Aucune notification pour le moment
+			</div>
+		{% else %}
+
 			{% for notif in notifications %}
-				<li style="{% if not notif.isRead %}font-weight:bold;{% endif %}">
-					{{ notif.content }}
-					<small>
-						-
-						{{ notif.createdAt|date('d/m/Y H:i') }}
-					</small>
-				</li>
+				<div style="
+						                background: {{ notif.isRead ? '#fff' : '#eef4ff' }};
+						                border: 1px solid #e5e7eb;
+						                border-radius: 10px;
+						                padding: 15px;
+						                margin-bottom: 12px;
+						                box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+						            ">
+
+					<div style="display:flex; justify-content:space-between; align-items:center;">
+
+						<div style="{{ not notif.isRead ? 'font-weight:bold;' }}">
+							{{ notif.content }}
+						</div>
+
+						<div style="font-size:0.85em; color:#666;">
+							{{ notif.createdAt|date('d/m/Y H:i') }}
+						</div>
+
+					</div>
+
+				</div>
 			{% endfor %}
-		</ul>
-	{% endif %}
+
+		{% endif %}
+
+	</div>
 
 {% endblock %}

@@ -7,8 +7,32 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post as ApiPost;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => ['post:read']]),
+        new GetCollection(normalizationContext: ['groups' => ['post:read']]),
+        new ApiPost(
+            security: "is_granted('ROLE_USER')",
+            processor: null
+        )
+    ]
+)]
+
+
+#[ApiFilter(SearchFilter::class, properties: [
+    'content' => 'partial',
+    'author.username' => 'partial'
+])]
+
 class Post
 {
     #[ORM\Id]
@@ -17,6 +41,7 @@ class Post
     private ?int $id = null;
 
     #[ORM\Column(type: 'text')]
+    #[Groups(['post:read', 'post:write'])]
     private ?string $content = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
@@ -24,9 +49,14 @@ class Post
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['post:read'])]
     private ?User $author = null;
 
     
+
+    
+    
+
 
     #[ORM\ManyToMany(targetEntity: User::class)]
     #[ORM\JoinTable(name: 'post_likes')]

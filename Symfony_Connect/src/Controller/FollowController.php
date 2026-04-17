@@ -2,10 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Follow;
 use App\Entity\Notification;
 use App\Entity\User;
-use App\Repository\FollowRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +20,6 @@ final class FollowController extends AbstractController
         string $username,
         Request $request,
         UserRepository $repo,
-        FollowRepository $followRepo,
         EntityManagerInterface $em
     ): Response {
         $user = $repo->findOneBy(['username' => $username]);
@@ -34,29 +31,17 @@ final class FollowController extends AbstractController
         /** @var User $me */
         $me = $this->getUser();
 
-        // ✅ impossible de se suivre soi-même
         if ($me === $user) {
             throw $this->createAccessDeniedException('Action interdite.');
         }
 
-        // ✅ vérifie le token CSRF
         if (!$this->isCsrfTokenValid('follow' . $user->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('Token CSRF invalide.');
         }
 
-        // ✅ vérifie qu'on ne suit pas déjà
-        $existingFollow = $followRepo->findOneBy([
-            'follower' => $me,
-            'followed' => $user,
-        ]);
+        if (!$me->isFollowing($user)) {
+            $me->follow($user);  
 
-        if (!$existingFollow) {
-            $follow = new Follow();
-            $follow->setFollower($me);
-            $follow->setFollowed($user);
-            $em->persist($follow);
-
-            // ✅ notification
             $notif = new Notification();
             $notif->setRecipient($user);
             $notif->setType('follow');
@@ -74,7 +59,6 @@ final class FollowController extends AbstractController
         string $username,
         Request $request,
         UserRepository $repo,
-        FollowRepository $followRepo,
         EntityManagerInterface $em
     ): Response {
         $user = $repo->findOneBy(['username' => $username]);
@@ -90,18 +74,12 @@ final class FollowController extends AbstractController
             throw $this->createAccessDeniedException('Action interdite.');
         }
 
-        // ✅ vérifie le token CSRF
         if (!$this->isCsrfTokenValid('unfollow' . $user->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('Token CSRF invalide.');
         }
 
-        $existingFollow = $followRepo->findOneBy([
-            'follower' => $me,
-            'followed' => $user,
-        ]);
-
-        if ($existingFollow) {
-            $em->remove($existingFollow);
+        if ($me->isFollowing($user)) {
+            $me->unfollow($user);  
             $em->flush();
         }
 

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<h2 style="margin-bottom:20px;">Messages</h2>
+
+	<div style="display:flex; flex-direction:column; gap:10px;">
+
+		{% for c in conversations %}
+
+			{% set otherUser = c.user1 == app.user ? c.user2 : c.user1 %}
+
+			<a href="{{ path('app_conversation', {id: c.id}) }}" style="display:flex; justify-content:space-between;
+					                  padding:12px 15px;
+					                  background:#fff;
+					                  border:1px solid #eee;
+					                  border-radius:10px;
+					                  text-decoration:none;
+					                  color:black;">
+
+				<div>
+					<strong>{{ otherUser.username }}</strong>
+					<div style="font-size:0.85em; color:#777;">
+						Conversation
+					</div>
+				</div>
+
+				<div style="align-self:center; color:#999;">
+					→
+				</div>
+
+			</a>
+
+		{% else %}
+
+			<p>Aucune conversation</p>
+
+		{% endfor %}
+
+	</div>
+
+{% endblock %}

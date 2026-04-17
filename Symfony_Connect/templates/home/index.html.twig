@@ -3,50 +3,149 @@
 {% block title %}Accueil - SymfoConnect
 {% endblock %}
 
+{% block stylesheets %}
+    <style>
+        .feed {
+            max-width: 640px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .feed-title {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+        .post {
+            background: #fff;
+            border: 0.5px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 16px;
+        }
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+        .avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: #e6f1fb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 500;
+            color: #185fa5;
+            flex-shrink: 0;
+        }
+        .author {
+            font-size: 16px;
+            font-weight: 500;
+            color: #111;
+            text-decoration: none;
+        }
+        .author:hover {
+            text-decoration: underline;
+        }
+        .date {
+            font-size: 13px;
+            color: #aaa;
+            margin-top: 2px;
+        }
+        .post-content {
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 18px;
+        }
+        .post-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding-top: 14px;
+            border-top: 0.5px solid #e5e5e5;
+        }
+        .btn-like {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 7px 14px;
+            border-radius: 8px;
+            color: #888;
+            font-size: 15px;
+        }
+        .btn-like:hover {
+            background: #f5f5f5;
+        }
+        .btn-like.liked {
+            color: #e24b4a;
+        }
+        .btn-like svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+        .like-count {
+            font-size: 15px;
+            color: #888;
+        }
+    </style>
+
+{% endblock %}
+
 {% block body %}
-	<h1>Derniers posts</h1>
-	<div>
+	<div class="feed">
+		<h1>Derniers posts</h1>
+
 		{% for post in posts %}
-			<div class="post-card">
-				<div class="post-meta">
-                <a href="{{ path('app_profile', {username: post.author.username}) }}">
-
-                    {{ post.author.username }}
-                </a>
-
-					-
-					{{ post.createdAt ? post.createdAt|date('d/m/Y H:i') : 'Date inconnue' }}
+			<div class="post">
+				<div class="post-header">
+					<div class="avatar">
+						{{ post.author.username|slice(0,2)|upper }}
+					</div>
+					<div>
+						<a class="author" href="{{ path('app_profile', {username: post.author.username}) }}">
+							{{ post.author.username }}
+						</a>
+						<div class="date">
+							{{ post.createdAt ? post.createdAt|date('d/m/Y H:i') : 'Date inconnue' }}
+						</div>
+					</div>
 				</div>
-				<div class="post-content">
-					{{ post.content|e }}
+
+				<div class="post-content">{{ post.content|e }}</div>
+
+				<div class="post-actions">
+					{% if app.user %}
+						<form method="post" action="{{ path('post_like', { id: post.id }) }}" style="display:contents">
+							<button type="submit" class="btn-like {% if post.isLikedBy(app.user) %}liked{% endif %}">
+								{% if post.isLikedBy(app.user) %}
+									{# Cœur plein #}
+									<svg viewbox="0 0 24 24" fill="currentColor">
+										<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+									</svg>
+									Ne plus liker
+								{% else %}
+									{# Cœur vide #}
+									<svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+										<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+									</svg>
+									Liker
+								{% endif %}
+							</button>
+						</form>
+					{% endif %}
+					<span class="like-count">{{ post.likesCount }}
+						likes</span>
 				</div>
-                
-
-
-            <form method="post" action="{{ path('post_like', { id: post.id }) }}">
-                <button type="submit">
-                {% if app.user %}
-
-                    {% if post.isLikedBy(app.user) %}
-                        💔 Ne plus liker
-                    {% else %}
-                        ❤️ Liker
-                    {% endif %}
-                {% endif %}
-
-                </button>
-            </form>
-
-            <span>{{ post.likesCount }}
-                likes</span>
-
-
-
-
-
 			</div>
 		{% else %}
-			<div>Aucun post pour le moment.</div>
+			<div style="text-align:center;color:#aaa;padding:2rem;font-size:14px;">Aucun post pour le moment.</div>
 		{% endfor %}
 	</div>
 {% endblock %}

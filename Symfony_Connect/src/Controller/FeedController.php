@@ -15,25 +15,23 @@ final class FeedController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function index(PostRepository $postRepository): Response
     {
-        $user = $this->getUser();
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
 
-        if (!$user instanceof User) {
-            throw $this->createAccessDeniedException();
-        }
+        $following = $currentUser->getFollowing();
 
-        
-        $following = $user->getFollowing();
-
-        
         if ($following->isEmpty()) {
             return $this->render('feed/index.html.twig', [
-                'posts' => [],
-                'empty' => true,
+                'posts'       => [],
+                'currentUser' => $currentUser,
+                'empty'       => true,
             ]);
         }
 
-        
         $posts = $postRepository->createQueryBuilder('p')
+            ->leftJoin('p.author', 'a')      
+            ->leftJoin('p.likes', 'l')        
+            ->addSelect('a', 'l')
             ->where('p.author IN (:users)')
             ->setParameter('users', $following)
             ->orderBy('p.createdAt', 'DESC')
@@ -41,8 +39,9 @@ final class FeedController extends AbstractController
             ->getResult();
 
         return $this->render('feed/index.html.twig', [
-            'posts' => $posts,
-            'empty' => false,
+            'posts'       => $posts,
+            'currentUser' => $currentUser,   
+            'empty'       => empty($posts),
         ]);
     }
 }
